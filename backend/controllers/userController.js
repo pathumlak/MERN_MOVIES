@@ -4,9 +4,10 @@ import User from "../models/userModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 
-
 // import createtoken
- import createToken from "../utils/createToken.js"
+import createToken from "../utils/createToken.js";
+
+// craete a new user
 
 const createUser = asyncHandler(async (req, res) => {
   //   res.send("hello");
@@ -37,4 +38,34 @@ const createUser = asyncHandler(async (req, res) => {
   }
 });
 
-export default createUser;
+// login to user
+const loginUser = asyncHandler(async (req, res) => {
+  // login logic here
+  //   we need login to the user for email and password
+  const { email, password } = req.body;
+
+  //   check if user is exist or not
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password,
+    );
+    if (isPasswordValid) {
+        createToken(res, existingUser._id);
+      res.status(200).send("Login successful");
+    }
+    return;
+  }
+});
+
+// logout current user
+const logoutCurrentUser = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).send("Logout successful");
+});
+
+export { createUser, loginUser, logoutCurrentUser };
