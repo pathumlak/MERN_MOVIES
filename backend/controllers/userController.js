@@ -4,6 +4,10 @@ import User from "../models/userModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 
+
+// import createtoken
+ import createToken from "../utils/createToken.js"
+
 const createUser = asyncHandler(async (req, res) => {
   //   res.send("hello");
   // create a user credendials
@@ -26,6 +30,7 @@ const createUser = asyncHandler(async (req, res) => {
   const newUser = new User({ username, email, password: hashedPassword });
   try {
     await newUser.save();
+    createToken(res, newUser._id);
     res.status(201).send("User created successfully");
   } catch (error) {
     res.status("Invalid User data");
