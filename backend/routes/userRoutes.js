@@ -5,7 +5,8 @@ import {
   logoutCurrentUser,
   getAllUsers,
   getCurrentUserProfile,
-  updateCurrentUserProfile
+  updateCurrentUserProfile,
+  deleteUserById
 } from "../controllers/userController.js";
 
 // imprort the authentication
@@ -22,5 +23,8 @@ router.post("/logout", logoutCurrentUser);
 
 // get user profie and update
 router.route('/profile').get(authenticate, getCurrentUserProfile).put(authenticate, updateCurrentUserProfile);
+
+// delete user profile using admin
+router.route('/:id').delete(authenticate, authorizeAdmin, deleteUserById);
 
 export default router;
