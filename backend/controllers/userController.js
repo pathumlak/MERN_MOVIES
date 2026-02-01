@@ -53,10 +53,17 @@ const loginUser = asyncHandler(async (req, res) => {
     );
     if (isPasswordValid) {
       createToken(res, existingUser._id);
-      res.status(200).send("Login successful");
+      res.status(200).json({
+        _id: existingUser._id,
+        username: existingUser.username,
+        email: existingUser.email,
+        isAdmin: existingUser.isAdmin,
+      });
+      return;
     }
-    return;
   }
+  res.status(401);
+  throw new Error("Invalid email or password");
 });
 
 // logout current user

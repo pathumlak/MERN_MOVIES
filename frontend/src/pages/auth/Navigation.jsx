@@ -86,10 +86,11 @@ function Navigation() {
           className="flex items-center text-gray-8000 focu:outline-none"
         >
           {userInfo ? (
-            <span className="text-white">{userInfo.name}</span>
+            <span className="text-white">{userInfo.username}</span>
           ) : (
             <></>
           )}
+          
         </button>
       </div>
       {/* login screen */}
